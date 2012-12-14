@@ -1,0 +1,44 @@
+[user]
+	email = jeremy@spotify.net
+	name = Jeremy Huntwork
+[status]
+	showUntrackedFiles = normal
+[core]
+	excludesfile = ~/.gitignore_global
+	attributesfile = ~/.gitattributes_global
+[push]
+	default = tracking
+[rerere]
+	enabled = 1
+	autoupdate = 1
+[color]
+	diff = auto
+	interactive = auto
+	branch = auto
+	status = auto
+[alias]
+	dc = describe --contains
+	fp = format-patch -k -M -N
+	k = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	b = branch -v
+	bu = bundle
+	d = diff
+	ds = diff --staged
+	cp = cherry-pick
+	dsc = describe
+	nr = name-rev --name-only --refs=refs/heads/*
+	nri = name-rev --refs=refs/heads/* --stdin
+	ss = status -sb
+	pulla = pull --all
+	pusha = push --all
+	dw = diff --color-words
+	wd = diff --word-diff
+	co = checkout
+	cl = clone
+	cm = commit
+	st = status
+	where = log --pretty=format:'%ad %h %d' --abbrev-commit --date=short -1
+	sr = svn rebase
+	sd = svn dcommit
+[branch]
+	autosetuprebase = always
