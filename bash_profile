@@ -6,7 +6,7 @@ function jssh() {
 	then
 		echo Missing hostname
 	else
-		ssh -t "$1" "if [ -d ~/.dotfiles ] ; then cd .dotfiles ; git pull ; else git clone git@github.com:jhuntwork/dotfiles.git .dotfiles ; cd .dotfiles && for f in * ; do ln -sf ./.dotfiles/\$f ../.\$f ; done ; fi ; cd ; exec /bin/bash --login"
+		ssh -t "$@" "if [ -d ~/.dotfiles ] ; then cd .dotfiles ; git pull ; else git clone git@github.com:jhuntwork/dotfiles.git .dotfiles ; cd .dotfiles && for f in * ; do ln -sf ./.dotfiles/\$f ../.\$f ; done ; fi ; cd ; exec /bin/bash --login"
 	fi
 }
 
