@@ -1,13 +1,28 @@
+# Personal Bash Profile settings
 alias ll='ls -l'
+
+function jssh() {
+	if [ -z $1 ]
+	then
+		echo Missing hostname
+	else
+		ssh -t "$1" "if [ -d ~/.dotfiles ] ; then cd .dotfiles ; git pull ; else git clone git@github.com:jhuntwork/dotfiles.git .dotfiles ; cd .dotfiles && for f in * ; do ln -sf ./.dotfiles/\$f ../.\$f ; done ; fi ; cd ; exec /bin/bash --login"
+	fi
+}
 
 # Setup a red prompt for root and a green one for users. 
 NORMAL="\[\e[0m\]"
 RED="\[\e[1;31m\]"
 GREEN="\[\e[1;32m\]"
+CYAN="\[\e[1;36m\]"
 if [[ $EUID == 0 ]] ; then
         PS1="$RED\u$NORMAL@\h \w$RED \\$ $NORMAL"
 else
-        PS1="$GREEN\u$NORMAL@\h \w$GREEN \\$ $NORMAL"
+	if [[ `hostname` = 'krikkit.local' ]] ; then
+        	PS1="$CYAN\u$NORMAL@\h \w$CYAN \\$ $NORMAL"
+	else
+        	PS1="$GREEN\u$NORMAL@\h \w$GREEN \\$ $NORMAL"
+	fi
 fi
 PS2=' '
 
