@@ -5,7 +5,7 @@ shopt -s checkwinsize
 alias ll='ls -l'
 
 function jssh() {
-    local GIT="~/.git-static/git --exec-path=\$HOME/.git-static/git-core"
+    local GIT="\$HOME/.git-static/git --exec-path=\$HOME/.git-static/git-core"
     local REPO="git@github.com:jhuntwork/dotfiles.git"
     local RMTCMD="
     if [ -d ~/.dotfiles ]
@@ -31,7 +31,7 @@ function jssh() {
         echo "Transferring git-static..."
         ssh "$@" 'tar -xJf -' < ~/.git-static-x86_64-linux-musl.tar.xz
         echo "Updating .dotfiles and logging in..."
-		ssh -t "$@" "$RMTCMD"
+		ssh -A -t "$@" "$RMTCMD"
 	fi
 }
 
