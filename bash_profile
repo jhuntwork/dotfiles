@@ -10,7 +10,7 @@ function jssh() {
 		echo Missing hostname
 	else
         echo "Transferring git-static..."
-        ssh "$@" 'cat - | tar -xJf -' < ~/.git-static-x86_64-linux-musl.tar.xz
+        ssh "$@" 'tar -xJf -' < ~/.git-static-x86_64-linux-musl.tar.xz
         echo "Updating .dotfiles and logging in..."
 		ssh -t "$@" "if [ -d ~/.dotfiles ] ; then cd ~/.dotfiles ; ~/.git-static/git --exec-path=\$HOME/.git-static/git-core pull ; else ~/.git-static/git --exec-path=\$HOME/.git-static/git-core clone git@github.com:jhuntwork/dotfiles.git .dotfiles ; cd .dotfiles && for f in * ; do ln -sf ./.dotfiles/\$f ../.\$f ; done ; fi ; cd ; exec /bin/bash --login"
 	fi
