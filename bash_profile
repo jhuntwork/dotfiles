@@ -5,6 +5,25 @@ shopt -s checkwinsize
 alias ll='ls -l'
 
 function jssh() {
+    local GIT="~/.git-static/git --exec-path=\$HOME/.git-static/git-core"
+    local REPO="git@github.com:jhuntwork/dotfiles.git"
+    local RMTCMD="
+    if [ -d ~/.dotfiles ]
+    then
+        cd ~/.dotfiles
+        $GIT stash
+        $GIT pull
+    else
+        $GIT clone $REPO .dotfiles
+    fi
+    cd ~/.dotfiles &&
+    for f in *
+    do
+        ln -sf ./.dotfiles/\$f ../.\$f
+    done
+    cd
+    exec /bin/bash --login"
+    
 	if [ -z $1 ]
 	then
 		echo Missing hostname
@@ -12,7 +31,7 @@ function jssh() {
         echo "Transferring git-static..."
         ssh "$@" 'tar -xJf -' < ~/.git-static-x86_64-linux-musl.tar.xz
         echo "Updating .dotfiles and logging in..."
-		ssh -t "$@" "if [ -d ~/.dotfiles ] ; then cd ~/.dotfiles ; ~/.git-static/git --exec-path=\$HOME/.git-static/git-core pull ; else ~/.git-static/git --exec-path=\$HOME/.git-static/git-core clone git@github.com:jhuntwork/dotfiles.git .dotfiles ; cd .dotfiles && for f in * ; do ln -sf ./.dotfiles/\$f ../.\$f ; done ; fi ; cd ; exec /bin/bash --login"
+		ssh -t "$@" "$RMTCMD"
 	fi
 }
 
