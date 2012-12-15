@@ -1,21 +1,29 @@
-syntax on                                                                                                                                                                                                                                                                                                                     
+" misc / basic
+set ruler
+set backspace=2
+set nocompatible
 set encoding=utf-8
-colorscheme railscasts
-set autoindent
-set t_Co=256
-set smartindent
-"map <F3> :set list!
 
-" TABS
+" colors / schemes
+syntax on
+colorscheme railscasts
+set t_Co=256
+
+" indenting
+set autoindent
+set smartindent
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set expandtab
 
-"set listchars=tab:»\ ,trail:·
-"set list
-"cmap w!! %!sudo tee > /dev/null %
-
 " SEARCH highlight
 set incsearch
 set hlsearch
+
+" Cursor highlight
+set cursorline
+"set cursorcolumn
+
+" Show hidden chars
+"set invlist
