@@ -16,12 +16,12 @@ RED="\[\e[1;31m\]"
 GREEN="\[\e[1;32m\]"
 CYAN="\[\e[1;36m\]"
 if [[ $EUID == 0 ]] ; then
-        PS1="$RED\u$NORMAL@\h \w$RED \\$ $NORMAL"
+        PS1="$RED\u$NORMAL@\H \w$RED \\$ $NORMAL"
 else
 	if [[ `hostname` = 'krikkit.local' ]] ; then
-        	PS1="$CYAN\u$NORMAL@\h \w$CYAN \\$ $NORMAL"
+        	PS1="$CYAN\u$NORMAL@\H \w$CYAN \\$ $NORMAL"
 	else
-        	PS1="$GREEN\u$NORMAL@\h \w$GREEN \\$ $NORMAL"
+        	PS1="$GREEN\u$NORMAL@\H \w$GREEN \\$ $NORMAL"
 	fi
 fi
 PS2=' '
