@@ -31,7 +31,7 @@ function jssh() {
     cd ~/.dotfiles &&
     for f in *
     do
-        ln -sf ./.dotfiles/\$f ../.\$f
+        ln -sf .dotfiles/\$f ../.\$f
     done
     cd
     chmod -R go= .
@@ -56,10 +56,10 @@ function jssh() {
 }
 
 # Setup a red prompt for root and a green one for users. 
-NORMAL="\[\e[0m\]"
-RED="\[\e[1;31m\]"
-GREEN="\[\e[1;32m\]"
-CYAN="\[\e[1;36m\]"
+NORMAL="\033[00m"
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+CYAN="\033[0;36m"
 if [[ $EUID == 0 ]] ; then
         PS1="$RED\u$NORMAL@\H \w$RED \\$ $NORMAL"
 else
