@@ -31,7 +31,8 @@ function jssh() {
     cd ~/.dotfiles &&
     for f in *
     do
-        ln -sf .dotfiles/\$f ../.\$f
+        rm -f \$HOME/.\$f
+        ln -s .dotfiles/\$f ../.\$f
     done
     cd
     chmod -R go= .
