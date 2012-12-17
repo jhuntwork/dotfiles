@@ -12,7 +12,7 @@ function jssh() {
     PATH=\"$GITPATH:\$PATH\"
     if ! type -p git >/dev/null
     then
-        echo Missing git remotely
+        echo Remote host missing git
         exit 133
     fi
     if [ \"\$(type -p git)\" = \"$GITPATH/git\" ]
@@ -31,10 +31,10 @@ function jssh() {
     cd ~/.dotfiles &&
     for f in *
     do
-        rm -f \$HOME/.\$f
+        rm -rf \$HOME/.\$f
         ln -s .dotfiles/\$f ../.\$f
     done
-    cd
+    cd &&
     chmod -R go= .
     PATH=\$OLDPATH
     unset OLDPATH
