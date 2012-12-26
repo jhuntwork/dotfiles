@@ -2,6 +2,15 @@
 shopt -s expand_aliases
 shopt -s checkwinsize
 
+case `uname -s` in
+    "Darwin")
+        export CLICOLOR=1
+        ;;
+    "Linux")
+        alias ls="ls --color"
+        ;;
+esac
+
 alias ll='ls -l'
 
 function jssh() {
@@ -51,7 +60,7 @@ function jssh() {
             echo "Transferring git-static..."
             ssh "$@" 'tar -xJf -' < ~/.git-static-x86_64-linux-musl.tar.xz
             echo "Reattempting to update .dotfiles and log in..."
-		    ssh -A -t "$@" "$RMTCMD"
+            ssh -A -t "$@" "$RMTCMD"
         fi
     fi
 }
