@@ -66,17 +66,17 @@ function jssh() {
 }
 
 # Setup a red prompt for root and a green one for users. 
-NORMAL="\033[00m"
-RED="\033[0;31m"
-GREEN="\033[0;32m"
-CYAN="\033[0;36m"
+NORMAL=$(tput sgr0)
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+CYAN=$(tput setaf 6)
 if [[ $EUID == 0 ]] ; then
-        PS1="$RED\u$NORMAL@\H \w$RED \\$ $NORMAL"
+        PS1="\[$RED\]\u\[$NORMAL\]@\H \w\[$RED\] \\$ \[$NORMAL\]"
 else
 	if [[ `hostname` = 'krikkit.local' ]] ; then
-        	PS1="$CYAN\u$NORMAL@\H \w$CYAN \\$ $NORMAL"
+            PS1="\[$CYAN\]\u\[$NORMAL\]@\H \w\[$CYAN\] \\$ \[$NORMAL\]"
 	else
-        	PS1="$GREEN\u$NORMAL@\H \w$GREEN \\$ $NORMAL"
+            PS1="\[$GREEN\]\u\[$NORMAL\]@\H \w\[$GREEN\] \\$ \[$NORMAL\]"
 	fi
 fi
 PS2=' '
