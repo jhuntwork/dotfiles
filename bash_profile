@@ -43,5 +43,6 @@ export HISTSIZE=1000
 export HISTFILESIZE=2000
 export HISTTIMEFORMAT="%F %T :: "
 export HISTCONTROL=ignoredups:ignorespace
+export EDITOR=vim
 
 test -f $HOME/.jssh && source $HOME/.jssh
