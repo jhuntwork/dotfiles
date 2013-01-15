@@ -44,5 +44,6 @@ export HISTFILESIZE=2000
 export HISTTIMEFORMAT="%F %T :: "
 export HISTCONTROL=ignoredups:ignorespace
 export EDITOR=vim
+unset TMOUT
 
 test -f $HOME/.jssh && source $HOME/.jssh
