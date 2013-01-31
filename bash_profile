@@ -46,4 +46,55 @@ export HISTCONTROL=ignoredups:ignorespace
 export EDITOR=vim
 unset TMOUT
 
-test -f $HOME/.jssh && source $HOME/.jssh
+function jssh() {
+    local GITPATH="\$HOME/.git-static"
+    local RMTCMD="
+    PATH=\"\$PATH:$GITPATH\"
+    if ! type -p git >/dev/null
+    then
+        echo Remote host missing git
+        exit 133
+    fi
+    exec /bin/bash --login"
+
+    if [ -z $1 ]
+    then
+        echo Missing hostname
+    else
+        ssh "$@" 'cat >~/.bash_profile -' < ~/.bash_profile
+        ssh -A -t "$@" "$RMTCMD"
+        if [ $? -eq 133 ]
+        then
+            echo "Transferring git-static..."
+            ssh "$@" 'tar -xJf -' < ~/.git-static-x86_64-linux-musl.tar.xz
+            ssh -A -t "$@"
+        fi
+    fi
+}
+
+function jpull() {
+    local GITPATH="$HOME/.git-static"
+    local REPO="git@github.com:jhuntwork/dotfiles.git"
+    PATH="$PATH:$GITPATH"
+    if [ "$(type -p git)" = "$GITPATH/git" ]
+    then
+        shopt -s expand_aliases
+        alias git="$GITPATH/git --exec-path=$GITPATH/git-core"
+    fi
+    if [ -d ~/.dotfiles ]
+    then
+        cd ~/.dotfiles
+        git pull
+    else
+        cd
+        git clone $REPO .dotfiles
+    fi
+    cd ~/.dotfiles &&
+    for f in *
+    do
+        rm -rf $HOME/.$f
+        ln -s .dotfiles/$f ../.$f
+    done
+    cd &&
+    chmod -R go= .
+}

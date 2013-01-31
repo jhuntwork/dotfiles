@@ -3,7 +3,7 @@ set ruler
 set backspace=2
 set nocompatible
 set encoding=utf-8
-set number
+"set number
 
 " colors / schemes
 syntax on
