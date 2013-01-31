@@ -84,6 +84,7 @@ function jpull() {
     if [ -d ~/.dotfiles ]
     then
         cd ~/.dotfiles
+        git reset --hard HEAD
         git pull
     else
         cd
