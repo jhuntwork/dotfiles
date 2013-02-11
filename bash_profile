@@ -44,7 +44,16 @@ export HISTFILESIZE=2000
 export HISTTIMEFORMAT="%F %T :: "
 export HISTCONTROL=ignoredups:ignorespace
 export EDITOR=vim
+export GITPATH="$HOME/.git-static"
+export PATH="$PATH:$GITPATH"
+
+if [ "$(type -p git)" = "$GITPATH/git" ]
+then
+    shopt -s expand_aliases
+    alias git="$GITPATH/git --exec-path=$GITPATH/git-core"
+fi
 unset TMOUT
+
 
 function jssh() {
     local GITPATH="\$HOME/.git-static"
@@ -54,33 +63,24 @@ function jssh() {
     then
         echo Remote host missing git
         exit 133
-    fi
-    exec /bin/bash --login"
+    fi"
 
     if [ -z $1 ]
     then
         echo Missing hostname
     else
-        ssh "$@" 'cat >~/.bash_profile -' < ~/.bash_profile
-        ssh -A -t "$@" "$RMTCMD"
+        ssh "$@" "cat >~/.bash_profile - ; $RMTCMD" < ~/.bash_profile
         if [ $? -eq 133 ]
         then
             echo "Transferring git-static..."
             ssh "$@" 'tar -xJf -' < ~/.git-static-x86_64-linux-musl.tar.xz
-            ssh -A -t "$@"
         fi
+        ssh "$@"
     fi
 }
 
 function jpull() {
-    local GITPATH="$HOME/.git-static"
     local REPO="git@github.com:jhuntwork/dotfiles.git"
-    PATH="$PATH:$GITPATH"
-    if [ "$(type -p git)" = "$GITPATH/git" ]
-    then
-        shopt -s expand_aliases
-        alias git="$GITPATH/git --exec-path=$GITPATH/git-core"
-    fi
     if [ -d ~/.dotfiles ]
     then
         cd ~/.dotfiles
