@@ -81,6 +81,7 @@ function jssh() {
 
 function jpull() {
     local REPO="git@github.com:jhuntwork/dotfiles.git"
+    CURDIR=`pwd`
     if [ -d ~/.dotfiles ]
     then
         cd ~/.dotfiles
@@ -96,6 +97,6 @@ function jpull() {
         rm -rf $HOME/.$f
         ln -s .dotfiles/$f ../.$f
     done
-    cd &&
     chmod -R go= .
+    cd $CURDIR
 }
