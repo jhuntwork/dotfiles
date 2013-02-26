@@ -1,3 +1,5 @@
+# The path_ functions are modified from http://stackoverflow.com/questions/370047
+
 # Removes one directory from the PATH env. variable
 # Accepts one path argument
 path_remove () {
