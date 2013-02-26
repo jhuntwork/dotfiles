@@ -1,17 +1,26 @@
+# Removes one directory from the PATH env. variable
+# Accepts one path argument
 path_remove () {
     export PATH=$(printf ${PATH} | awk -v RS=: -v ORS=: '$0 != "'$1'"' | sed 's/:$//')
 }
 
+# Appends one directory to the PATH env. variable
+# Accepts one path argument
 path_append () {
     path_remove "${1}"
     export PATH="${PATH}:${1}"
 }
 
+# Prepends one directory to the PATH env. variable
+# Accepts one path argument
 path_prepend () {
     path_remove "${1}"
     export PATH="${1}:${PATH}"
 }
 
+# Discovers if git is installed.
+# If not available, download a small, static version from github and make it available via
+# an alias as well as an exported env. variable: SGIT (required for use in jpull())
 set_git () {
     export SGITPATH="${HOME}/.git-static"
     local SGITURL="https://raw.github.com/jhuntwork/dotfiles/master/git-static-x86_64-linux-musl.tar.xz"
@@ -29,9 +38,10 @@ set_git () {
         export SGIT="git"
     fi
     path_remove "${SGITPATH}"
-    printf "${GIT}"
 }
 
+# Setup the dotfiles repo locally, or pull latest version from github.
+# Create symlinks in the $HOME directory to elements in the repo
 jpull() {
     local REPO="git@github.com:jhuntwork/dotfiles.git"
     set_git
@@ -54,6 +64,8 @@ jpull() {
     exec /bin/bash --login
 }
 
+# Simple wrapper for ssh which makes jpull() available in the remote session
+# regardless of whether .dotfiles is present remotely or not
 function jssh() {
     local FUNC_NAMES='jpull path_remove path_append set_git'
     local FUNCS=$(declare -f ${FUNC_NAMES})
