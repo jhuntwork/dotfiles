@@ -20,7 +20,6 @@ set_git () {
         cd ${HOME}
         printf "No local git. Downloading static version from GitHub...\n" >&2
         curl --progress-bar ${SGITURL} | tar -xJf -
-        install -d "${SGITPATH}/git-core/templates"
         cd ${OLDPWD}
     fi
     if [[ "$(type -p git)" = "${SGITPATH}/git" ]] ; then
