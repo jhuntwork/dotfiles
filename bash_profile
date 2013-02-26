@@ -47,7 +47,7 @@ path_remove () {
 }
 
 path_append () {
-    path_remove "{$1}"
+    path_remove "${1}"
     export PATH="${PATH}:${1}"
 }
 
@@ -57,48 +57,50 @@ path_prepend () {
 }
 
 set_git () {
-    local SGITPATH="${HOME}/.git-static"
+    export SGITPATH="${HOME}/.git-static"
     local SGITURL="https://raw.github.com/jhuntwork/dotfiles/master/git-static-x86_64-linux-musl.tar.xz"
     path_append "${SGITPATH}"
-    case $(type -p git) in
-        "$HOME/.git-static/git")
-            alias git="${SGITPATH}/git --exec-path=${SGITPATH}/git-core"
-            ;;
-        "")
-            cd ${HOME}
-            echo "No local git. Downloading static version from GitHub..."
-            curl --progress-bar ${SGITURL} | tar -xJf -
-            cd ${OLDPWD}
-            alias git="${SGITPATH}/git --exec-path=${SGITPATH}/git-core"
-            ;;
-    esac
+    if ! type git >/dev/null 2>&1 ; then
+        cd ${HOME}
+        printf "No local git. Downloading static version from GitHub...\n" >&2
+        curl --progress-bar ${SGITURL} | tar -xJf -
+        install -d "${SGITPATH}/git-core/templates"
+        cd ${OLDPWD}
+    fi
+    if [[ "$(type -p git)" = "${SGITPATH}/git" ]] ; then
+        local GIT="${SGITPATH}/git --exec-path=${SGITPATH}/git-core"
+        alias git="${GIT}"
+    else
+        local GIT="git"
+    fi
     path_remove "${SGITPATH}"
+    printf "${GIT}"
 }
 
 jpull() {
     local REPO="git@github.com:jhuntwork/dotfiles.git"
+    local GIT=$(set_git)
     CURDIR=$(pwd)
-    set_git
     if [[ -d "${HOME}/.dotfiles" ]] ; then
         cd "${HOME}/.dotfiles"
-        git reset --hard HEAD
-        git pull
+        ${GIT} reset --hard HEAD
+        ${GIT} pull
     else
         cd
-        git clone --depth 1 ${REPO} .dotfiles
+        ${GIT} clone --depth 1 ${REPO} .dotfiles
     fi
-    cd ${HOME}/.dotfiles &&
+    cd "${HOME}/.dotfiles" &&
     for f in * ; do
-        rm -rf $HOME/.$f
-        ln -s .dotfiles/$f ../.$f
+        rm -rf "${HOME}/.${f}"
+        ln -s ".dotfiles/${f}" "../.${f}"
     done
     chmod -R go= .
-    cd ${CURDIR}
+    cd "${CURDIR}"
     exec /bin/bash --login
 }
 
 function jssh() {
     local FUNC_NAMES='jpull path_remove path_append set_git'
     local FUNCS=$(declare -f ${FUNC_NAMES})
-    ssh -t "$@" "${FUNCS} ; export -f ${FUNC_NAMES} ; exec /bin/bash"
+    ssh -t "$@" "${FUNCS} ; export -f ${FUNC_NAMES} ; exec /bin/bash --login"
 }
