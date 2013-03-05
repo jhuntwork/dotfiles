@@ -42,4 +42,7 @@ export HISTTIMEFORMAT="%F %T :: "
 export HISTCONTROL=ignoredups:ignorespace
 export EDITOR=vim
 
-[[ -f "${HOME}/.functions.sh" ]] && source "${HOME}/.functions.sh"
+if [[ -f "${HOME}/.functions.sh" ]] ; then
+    source "${HOME}/.functions.sh"
+    set_git
+fi
