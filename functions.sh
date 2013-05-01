@@ -1,7 +1,6 @@
 # Setup the dotfiles repo locally, or pull latest version from github.
 # Create symlinks in the $HOME directory to elements in the repo
 jpull() {
-    set -e
     local REPO='git@github.com:jhuntwork/dotfiles.git'
     local SGITURL='https://raw.github.com/jhuntwork/dotfiles/master/git-static-x86_64-linux-musl.tar.xz'
     local SGITPATH="${HOME}/.git-static"
@@ -35,5 +34,5 @@ jpull() {
 # regardless of whether .dotfiles is present remotely or not
 function jssh() {
     local FUNCS=$(declare -f jpull)
-    ssh -t "$@" "${FUNCS} ; export -f jpull ; exec /bin/bash"
+    ssh -t "$@" "${FUNCS} ; export -f jpull ; if [ -e /etc/motd ] ; then cat /etc/motd ; fi ; jpull"
 }
