@@ -26,17 +26,12 @@ jpull() {
     done
     cd ${HOME}
     chmod -R go= .
-    exec /bin/bash
+    exec /bin/bash --login
 }
 
 # Simple wrapper for ssh which makes jpull() available in the remote session
 # regardless of whether .dotfiles is present remotely or not
 function jssh() {
     local FUNCS=$(declare -f jpull)
-    ssh -t "$@" "${FUNCS} ; export -f jpull ; cat > .jpull.sh << EOF
-${FUNCS}
-jpull
-EOF
-chmod 750 .jpull.sh
-exec /bin/bash --login"
+    ssh -t "$@" "${FUNCS} ; export -f jpull ; exec /bin/bash"
 }
