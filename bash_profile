@@ -44,5 +44,4 @@ export EDITOR=vim
 
 if [[ -f "${HOME}/.functions.sh" ]] ; then
     source "${HOME}/.functions.sh"
-    set_git
 fi
