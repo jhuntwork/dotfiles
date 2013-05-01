@@ -1,15 +1,17 @@
 # Setup the dotfiles repo locally, or pull latest version from github.
 # Create symlinks in the $HOME directory to elements in the repo
 jpull() {
+    set -e
     local REPO='git@github.com:jhuntwork/dotfiles.git'
     local SGITURL='https://raw.github.com/jhuntwork/dotfiles/master/git-static-x86_64-linux-musl.tar.xz'
     local SGITPATH="${HOME}/.git-static"
-    if ! git --version >/dev/null 2>&1 ; then
-        cd ${HOME}
-        curl --progress-bar ${SGITURL} | tar -xJf -
+    SGIT=git
+    if ! ${SGIT} --version >/dev/null 2>&1 ; then
         SGIT="${SGITPATH}/git --exec-path=${SGITPATH}/git-core"
-    else
-        SGIT='git'
+        if ! ${SGIT} --version >/dev/null 2>&1 ; then
+            cd ${HOME}
+            curl --progress-bar ${SGITURL} | tar -xJf -
+        fi
     fi
     if [[ -d "${HOME}/.dotfiles" ]] ; then
         cd "${HOME}/.dotfiles"
