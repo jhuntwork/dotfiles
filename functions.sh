@@ -34,5 +34,5 @@ jpull() {
 # regardless of whether .dotfiles is present remotely or not
 function jssh() {
     local FUNCS=$(declare -f jpull)
-    ssh -t "$@" "${FUNCS} ; export -f jpull ; if [ -e /etc/motd ] ; then cat /etc/motd ; fi ; jpull"
+    ssh -A -t "$@" "${FUNCS} ; export -f jpull ; if [ -e /etc/motd ] ; then cat /etc/motd ; fi ; jpull"
 }
