@@ -40,6 +40,7 @@
 	where = log --pretty=format:'%ad %h %d' --abbrev-commit --date=short -1
 	sr = svn rebase
 	sd = svn dcommit
-    pr = !sh -c 'git push origin HEAD:refs/for/`git symbolic-ref refs/remotes/origin/HEAD|cut -d/ -f4-`/`git rev-parse --abbrev-ref HEAD`'
+    #pr = !sh -c 'git push origin HEAD:refs/for/`git symbolic-ref refs/remotes/origin/HEAD|cut -d/ -f4-`/`git rev-parse --abbrev-ref HEAD`'
+    pr = !sh -c 'git push origin HEAD:refs/for/`git rev-parse --abbrev-ref HEAD`'
 [branch]
 	autosetuprebase = always
