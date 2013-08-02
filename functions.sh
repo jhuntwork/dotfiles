@@ -33,8 +33,8 @@ jpull() {
 
 # Simple wrapper for ssh which makes jpull() available in the remote session
 # regardless of whether .dotfiles is present remotely or not
-function jssh() {
-ssh -A -t "$@" \
+jssh() {
+    ssh -A -t "$@" \
     "[ -r /etc/motd ] && cat /etc/motd ;
     if ! type jpull >/dev/null 2>&1 ;
       then eval \"\$(curl -sL https://raw.github.com/jhuntwork/dotfiles/master/functions.sh)\" \
