@@ -15,7 +15,7 @@ PS2=" > "
 EDITOR=vim
 TZ=America/New_York
 LANG=en_US.UTF-8
-HISTFILE=.history
+HISTFILE="${HOME}/.history"
 HISTSIZE=1000
 # Darwinism
 CLICOLOR=1
