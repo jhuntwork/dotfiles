@@ -26,6 +26,8 @@ jpull() {
         ln -s ".dotfiles/${f}" "../.${f}"
     done
     cd ${HOME}
+    # Delete broken symlinks
+    find -L . -maxdepth 1 -type l -delete
     exec ${SHELL} -l
 }
 
@@ -34,6 +36,6 @@ jpull() {
 function jssh() {
 ssh -A -t "$@" '(type jpull >/dev/null 2>&1 || eval "$(curl -sL --connect-timeout 1 \
     https://raw.github.com/jhuntwork/dotfiles/master/functions.sh)") ;
-        [ -r /etc/motd ] && cat /etc/motd ;
-        exec ${SHELL} -l'
+    [ -r /etc/motd ] && cat /etc/motd ;
+    exec ${SHELL} -l'
 }
