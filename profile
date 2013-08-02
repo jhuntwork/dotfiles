@@ -1,22 +1,22 @@
 # Personal profile settings
 set_ps1 () {
     local R="\033[00m"
-    local M="\033[36m"
+    local M="\033[32m"
     local P='$'
     if [ "${USER}" = "root" ] ; then
         M="\033[31m"
         P='#'
     fi
-    printf "$(hostname -s) ${M}${PWD}${R}\n${P} "
+    printf "$(hostname -s) ${M}|\033[36m ${PWD}${R}\n${P} "
 }
 
 PS1='$(set_ps1)'
 PS2=" > "
 EDITOR=vim
-HISTSIZE=1000
 TZ=America/New_York
 LANG=en_US.UTF-8
 HISTFILE=.history
+HISTSIZE=1000
 # Darwinism
 CLICOLOR=1
 

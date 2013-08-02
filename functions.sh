@@ -28,14 +28,17 @@ jpull() {
     cd ${HOME}
     # Delete broken symlinks
     find -L . -maxdepth 1 -type l -exec rm -- {} +
-    exec ${SHELL} -l
+    exec env -i HOME="$HOME" TERM="$TERM" PATH="$PATH" SHELL="$SHELL" USER="$USER" ${SHELL} -i
 }
 
 # Simple wrapper for ssh which makes jpull() available in the remote session
 # regardless of whether .dotfiles is present remotely or not
 function jssh() {
 ssh -A -t "$@" \
-    '[ -r /etc/motd ] && cat /etc/motd ;
-    type jpull >/dev/null 2>&1 || eval "$(curl -sL https://raw.github.com/jhuntwork/dotfiles/master/functions.sh)";
-    jpull'
+    "[ -r /etc/motd ] && cat /etc/motd ;
+    if ! type jpull >/dev/null 2>&1 ;
+    then eval \"\$(curl -sL https://raw.github.com/jhuntwork/dotfiles/master/functions.sh)\" && jpull;
+    fi;
+    # The following line will get called only if jpull is not run or fails
+    exec env -i HOME=\"\$HOME\" TERM=\"\$TERM\" PATH=\"\$PATH\" SHELL=\"\$SHELL\" USER=\"\$USER\" \$SHELL -i"
 }
