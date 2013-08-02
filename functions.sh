@@ -28,7 +28,7 @@ jpull() {
     cd ${HOME}
     # Delete broken symlinks
     find -L . -maxdepth 1 -type l -exec rm -- {} +
-    exec env -i HOME="$HOME" TERM="$TERM" PATH="$PATH" SHELL="$SHELL" USER="$USER" ${SHELL} -i
+    . ./.profile
 }
 
 # Simple wrapper for ssh which makes jpull() available in the remote session
@@ -37,8 +37,13 @@ function jssh() {
 ssh -A -t "$@" \
     "[ -r /etc/motd ] && cat /etc/motd ;
     if ! type jpull >/dev/null 2>&1 ;
-    then eval \"\$(curl -sL https://raw.github.com/jhuntwork/dotfiles/master/functions.sh)\" && jpull;
+      then eval \"\$(curl -sL https://raw.github.com/jhuntwork/dotfiles/master/functions.sh)\" \
+      && jpull;
     fi;
-    # The following line will get called only if jpull is not run or fails
-    exec env -i HOME=\"\$HOME\" TERM=\"\$TERM\" PATH=\"\$PATH\" SHELL=\"\$SHELL\" USER=\"\$USER\" \$SHELL -i"
+    exec env -i SSH_AUTH_SOCK=\"\$SSH_AUTH_SOCK\" \
+      SSH_CONNECTION=\"\$SSH_CONNECTION\" \
+      SSH_CLIENT=\"\$SSH_CLIENT\" SSH_TTY=\"\$SSH_TTY\" \
+      HOME=\"\$HOME\" TERM=\"\$TERM\" \
+      PATH=\"\$PATH\" SHELL=\"\$SHELL\" \
+      USER=\"\$USER\" \$SHELL -i"
 }
