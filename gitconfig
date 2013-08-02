@@ -17,30 +17,30 @@
 	branch = auto
 	status = auto
 [alias]
-	dc = describe --contains
-	fp = format-patch -k -M -N
-	k = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	b = branch -v
 	bu = bundle
-	d = diff
-	ds = diff --staged
+	cl = clone
+	cm = commit
+	co = checkout
 	cp = cherry-pick
+	d = diff
+	dc = describe --contains
+	ds = diff --staged
 	dsc = describe
+	dw = diff --color-words
+	fp = format-patch -k -M -N
+	k = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	nr = name-rev --name-only --refs=refs/heads/*
 	nri = name-rev --refs=refs/heads/* --stdin
 	ss = status -sb
+	pr = !sh -c 'git push origin HEAD:refs/for/`git rev-parse --abbrev-ref HEAD`'
+	pom = push origin master
 	pulla = pull --all
 	pusha = push --all
-	dw = diff --color-words
-	wd = diff --word-diff
-	co = checkout
-	cl = clone
-	cm = commit
-	st = status
-	where = log --pretty=format:'%ad %h %d' --abbrev-commit --date=short -1
-	sr = svn rebase
 	sd = svn dcommit
-    #pr = !sh -c 'git push origin HEAD:refs/for/`git symbolic-ref refs/remotes/origin/HEAD|cut -d/ -f4-`/`git rev-parse --abbrev-ref HEAD`'
-    pr = !sh -c 'git push origin HEAD:refs/for/`git rev-parse --abbrev-ref HEAD`'
+	sr = svn rebase
+	st = status
+	wd = diff --word-diff
+	where = log --pretty=format:'%ad %h %d' --abbrev-commit --date=short -1
 [branch]
 	autosetuprebase = always
