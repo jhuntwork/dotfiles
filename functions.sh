@@ -9,10 +9,10 @@ jpull() {
         SGIT="${SGITPATH}/git --exec-path=${SGITPATH}/git-core"
         if ! ${SGIT} --version >/dev/null 2>&1 ; then
             cd ${HOME}
-            curl --progress-bar ${SGITURL} | tar -xJf -
+            curl -sL ${SGITURL} | tar -xJf -
         fi
     fi
-    if [[ -d "${HOME}/.dotfiles" ]] ; then
+    if [ -d "${HOME}/.dotfiles" ] ; then
         cd "${HOME}/.dotfiles"
         ${SGIT} reset --hard HEAD
         ${SGIT} pull
@@ -26,13 +26,14 @@ jpull() {
         ln -s ".dotfiles/${f}" "../.${f}"
     done
     cd ${HOME}
-    chmod -R go= .
-    exec /bin/bash --login
+    exec ${SHELL} -l
 }
 
 # Simple wrapper for ssh which makes jpull() available in the remote session
 # regardless of whether .dotfiles is present remotely or not
 function jssh() {
-    local FUNCS=$(declare -f jpull)
-    ssh -A -t "$@" "${FUNCS} ; export -f jpull ; if [ -e /etc/motd ] ; then cat /etc/motd ; fi ; jpull"
+ssh -A -t "$@" '(type jpull >/dev/null 2>&1 || eval "$(curl -sL --connect-timeout 1 \
+    https://raw.github.com/jhuntwork/dotfiles/master/functions.sh)") ;
+        [ -r /etc/motd ] && cat /etc/motd ;
+        exec ${SHELL} -l'
 }
