@@ -27,7 +27,7 @@ jpull() {
     done
     cd ${HOME}
     # Delete broken symlinks
-    find -L . -maxdepth 1 -type l -delete
+    find -L . -maxdepth 1 -type l -exec rm -- {} +
     exec ${SHELL} -l
 }
 
