@@ -16,6 +16,7 @@ EDITOR=vim
 HISTSIZE=1000
 TZ=America/New_York
 LANG=en_US.UTF-8
+HISTFILE=.history
 # Darwinism
 CLICOLOR=1
 
