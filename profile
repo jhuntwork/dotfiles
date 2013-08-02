@@ -11,7 +11,7 @@ set_ps1 () {
 }
 
 PS1='$(set_ps1)'
-PS2=" ${MYCOLOR}>${NORMAL} "
+PS2=" > "
 EDITOR=vim
 HISTSIZE=1000
 TZ=America/New_York
