@@ -47,3 +47,4 @@ jssh() {
       PATH=\"\$PATH\" SHELL=\"\$SHELL\" \
       USER=\"\$USER\" \$SHELL -i"
 }
+alias ssj="jssh"
