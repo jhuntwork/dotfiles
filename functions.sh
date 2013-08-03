@@ -1,8 +1,8 @@
 # Setup the dotfiles repo locally, or pull latest version from github.
 # Create symlinks in the $HOME directory to elements in the repo
 jpull() {
-    local REPO='https://github.com/jhuntwork/dotfiles.git'
-    local SGITURL='https://raw.github.com/jhuntwork/dotfiles/e374d0dbc1754b21a3d36b9df5742d351d7fe460/git-static-x86_64-linux-musl.tar.xz'
+    local REPO='https://github.com/jhuntwork/dotfiles'
+    local SGITURL="${REPO}/raw/e374d0dbc1754b21a3d36b9df5742d351d7fe460/git-static-x86_64-linux-musl.tar.xz"
     local SGITPATH="${HOME}/.git-static"
     SGIT=git
     if ! ${SGIT} --version >/dev/null 2>&1 ; then
@@ -17,18 +17,22 @@ jpull() {
         ${SGIT} reset --hard HEAD
         ${SGIT} pull
     else
-        cd ${HOME}
+        cd "${HOME}"
         ${SGIT} clone --depth 1 ${REPO} .dotfiles
     fi
     cd "${HOME}/.dotfiles" &&
     for f in * ; do
-        rm -rf "${HOME}/.${f}"
-        ln -s ".dotfiles/${f}" "../.${f}"
+        # A quick check on the files can prevent us from unnecessary forks
+        lf="${HOME}/.${f%/*}"
+        if [ ! "${f}" -ef "${lf}" ] ; then
+            rm -rf "${lf}"
+            ln -s ".dotfiles/${f}" "${lf}"
+        fi
     done
-    cd ${HOME}
-    # Delete broken symlinks
+    cd "${HOME}"
+    # Delete any broken symlinks in the homedir
     find -L . -maxdepth 1 -type l -exec rm -- {} +
-    . ./.profile
+    . "${HOME}/.profile"
 }
 
 # Simple wrapper for ssh which makes jpull() available in the remote session
