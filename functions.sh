@@ -22,7 +22,7 @@ jpull() {
     fi
     cd "${HOME}/.dotfiles" &&
     for f in * ; do
-        # A quick check on the files can prevent us from unnecessary forks
+        # A quick check on the files can prevent unnecessary forks
         lf="${HOME}/.${f%/*}"
         if [ ! "${f}" -ef "${lf}" ] ; then
             rm -rf "${lf}"

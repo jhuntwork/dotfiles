@@ -30,9 +30,8 @@ if [ "${0##*/}" = "bash" ] || [ "${0}" = "-bash" ] ; then
     shopt -s expand_aliases
     shopt -s checkwinsize
     HISTFILESIZE=2000
-    HISTTIMEFORMAT="%F %T :: "
     HISTCONTROL=ignoredups:ignorespace
-    export HISTFILESIZE HISTTIMEFORMAT HISTCONTROL
+    export HISTFILESIZE HISTCONTROL
 fi
 
 [ "$(uname -s)" = "Linux" ] && alias ls='ls --color'
