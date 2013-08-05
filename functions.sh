@@ -40,6 +40,7 @@ jpull() {
 jssh() {
     ssh -A -t "$@" \
     "[ -r /etc/motd ] && cat /etc/motd ;
+    . \"\$HOME/.profile\" ;
     if ! type jpull >/dev/null 2>&1 ;
       then eval \"\$(curl -sL https://raw.github.com/jhuntwork/dotfiles/master/functions.sh)\" \
       && jpull;
