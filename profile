@@ -4,10 +4,7 @@ R="\033[00m"
 M="\033[32m"
 P='$'
 
-if [ "${USER}" = "root" ] ; then
-        M="\033[31m"
-        P='#'
-fi
+[ "${USER}" = "root" ] && M="\033[31m" && P='#'
 
 set_ps1() {
     printf "${hn} ${M}|\033[36m ${PWD}${R}\n${P} "
@@ -32,6 +29,7 @@ if [ "${0##*/}" = "bash" ] || [ "${0}" = "-bash" ] ; then
     HISTFILESIZE=2000
     HISTCONTROL=ignoredups:ignorespace
     export HISTFILESIZE HISTCONTROL
+    [ -r "${HOME}/.rvm/scripts/rvm" ] && . "${HOME}/.rvm/scripts/rvm"
 fi
 
 [ "$(uname -s)" = "Linux" ] && alias ls='ls --color'
