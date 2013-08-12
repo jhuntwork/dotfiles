@@ -36,4 +36,4 @@ alias ll='ls -l'
 
 [ -r "${HOME}/.functions.sh" ] && . "${HOME}/.functions.sh"
 
-type -p rbenv && eval "$(rbenv init - | sed '/rbenv.bash/d')"
+type -p rbenv >/dev/null 2>&1 && eval "$(rbenv init - | sed '/rbenv.bash/d')"
