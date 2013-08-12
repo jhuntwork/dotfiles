@@ -3,7 +3,6 @@ set ruler
 set backspace=2
 set nocompatible
 set encoding=utf-8
-"set number
 
 " colors / schemes
 syntax on
@@ -11,7 +10,6 @@ colorscheme railscasts
 set t_Co=256
 
 " indenting
-set autoindent
 set smartindent
 set tabstop=4
 set shiftwidth=4
