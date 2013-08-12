@@ -29,10 +29,11 @@ if [ "${0##*/}" = "bash" ] || [ "${0}" = "-bash" ] ; then
     HISTFILESIZE=2000
     HISTCONTROL=ignoredups:ignorespace
     export HISTFILESIZE HISTCONTROL
-    [ -r "${HOME}/.rvm/scripts/rvm" ] && . "${HOME}/.rvm/scripts/rvm"
 fi
 
 [ "$(uname -s)" = "Linux" ] && alias ls='ls --color'
 alias ll='ls -l'
 
 [ -r "${HOME}/.functions.sh" ] && . "${HOME}/.functions.sh"
+
+type -p rbenv && eval "$(rbenv init - | sed '/rbenv.bash/d')"
