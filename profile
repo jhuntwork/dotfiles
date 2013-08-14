@@ -20,7 +20,7 @@ HISTSIZE=1000
 # Darwinism
 CLICOLOR=1
 
-export EDITOR HISTSIZE TZ LANG CLICOLOR
+export EDITOR TZ LANG HISTFILE HISTSIZE CLICOLOR
 
 # Used by bash, unused by mksh
 if [ "${0##*/}" = "bash" ] || [ "${0}" = "-bash" ] ; then
