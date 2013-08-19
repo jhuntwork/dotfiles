@@ -14,7 +14,7 @@ jpull() {
     fi
     if [ -d "${HOME}/.dotfiles" ] ; then
         cd "${HOME}/.dotfiles"
-        ${SGIT} reset --hard HEAD
+        ${SGIT} reset --hard HEAD >/dev/null 2>&1
         ${SGIT} pull
     else
         cd "${HOME}"
