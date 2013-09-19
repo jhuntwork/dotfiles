@@ -1,1 +1,1 @@
-profile
+[ -d /var/lib/spotify-rbenv ] && export PATH="$PATH:/var/lib/spotify-rbenv/rbenv/bin"
