@@ -1,46 +1,47 @@
 [user]
-	email = jeremy@spotify.com
-	name = Jeremy Huntwork
+    email = jeremy@spotify.com
+    name = Jeremy Huntwork
 [status]
-	showUntrackedFiles = normal
+    showUntrackedFiles = normal
 [core]
-	excludesfile = ~/.gitignore_global
-	attributesfile = ~/.gitattributes_global
+    excludesfile = ~/.gitignore_global
+    attributesfile = ~/.gitattributes_global
 [push]
-	default = tracking
+    default = tracking
 [rerere]
-	enabled = 1
-	autoupdate = 1
+    enabled = 1
+    autoupdate = 1
 [color]
-	diff = auto
-	interactive = auto
-	branch = auto
-	status = auto
+    diff = auto
+    interactive = auto
+    branch = auto
+    status = auto
 [alias]
-	b = branch -v
-	bu = bundle
-	cl = clone
-	cm = commit
-	co = checkout
-	cp = cherry-pick
-	d = diff
-	dc = describe --contains
-	ds = diff --staged
-	dsc = describe
-	dw = diff --color-words
-	fp = format-patch -k -M -N
-	k = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-	nr = name-rev --name-only --refs=refs/heads/*
-	nri = name-rev --refs=refs/heads/* --stdin
-	ss = status -sb
-	pr = !sh -c 'git push origin HEAD:refs/for/`git rev-parse --abbrev-ref HEAD`'
-	pom = push origin master
-	pulla = pull --all
-	pusha = push --all
-	sd = svn dcommit
-	sr = svn rebase
-	st = status
-	wd = diff --word-diff
-	where = log --pretty=format:'%ad %h %d' --abbrev-commit --date=short -1
+    b = branch -v
+    bu = bundle
+    cl = clone
+    cleanup = !sh -c 'git branch -D jh && git branch jh && git co jh'
+    cm = commit
+    co = checkout
+    cp = cherry-pick
+    d = diff
+    dc = describe --contains
+    ds = diff --staged
+    dsc = describe
+    dw = diff --color-words
+    fp = format-patch -k -M -N
+    k = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short
+    nr = name-rev --name-only --refs=refs/heads/*
+    nri = name-rev --refs=refs/heads/* --stdin
+    ss = status -sb
+    pr = !sh -c 'git push origin HEAD:refs/for/`git rev-parse --abbrev-ref HEAD`'
+    pom = push origin master
+    pulla = pull --all
+    pusha = push --all
+    sd = svn dcommit
+    sr = svn rebase
+    st = status
+    wd = diff --word-diff
+    where = log --pretty=format:'%ad %h %d' --abbrev-commit --date=short -1
 [branch]
-	autosetuprebase = always
+    autosetuprebase = always
