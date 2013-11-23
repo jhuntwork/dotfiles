@@ -36,3 +36,10 @@ au BufRead,BufNewFile *_spec.rb
 
 " Enable indentation matching for =>'s
 filetype plugin indent on
+
+" Syntax checking
+execute pathogen#infect()
+let g:syntastic_python_checkers = ['flake8']
+let g:syntastic_check_on_open = 1
+let g:syntastic_echo_current_error = 1
+highlight SyntasticError guibg=#2f0000
