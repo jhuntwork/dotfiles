@@ -10,6 +10,23 @@ set_ps1() {
     printf "${hn} ${M}|\033[36m ${PWD}${R}\n${P} "
 }
 
+IFS=':'
+FOUND=''
+for path in $(printf "$PATH") ; do
+    if ! printf "$FOUND" | grep -q "|-|${path}|-|" ; then
+        FOUND="${FOUND}|-|${path}|-|"
+        case "${path}" in
+            /bin|/sbin|/usr/bin|/usr/sbin|/usr/local/bin|/usr/local/sbin)
+                continue ;;
+            *)
+                NEWPATH="${NEWPATH}:${path}" ;;
+        esac
+    fi
+done
+PATH="/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin${NEWPATH}"
+export PATH
+IFS=' '
+
 PS1='$(set_ps1)'
 PS2=" > "
 EDITOR=vim
