@@ -42,4 +42,5 @@ execute pathogen#infect()
 let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_check_on_open = 1
 let g:syntastic_echo_current_error = 1
+let g:syntastic_python_flake8_args = "--max-line-length=80"
 highlight SyntasticError guibg=#2f0000
