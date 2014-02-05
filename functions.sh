@@ -21,6 +21,7 @@ jpull() {
     else
         cd "${HOME}"
         ${SGIT} clone --depth 1 ${REPO} .dotfiles
+        cd "${HOME}/.dotfiles"
         ${SGIT} submodule init
         ${SGIT} submodule update
     fi
