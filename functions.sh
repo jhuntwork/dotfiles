@@ -57,3 +57,7 @@ jssh() {
       USER=\"\$USER\" \$SHELL -i"
 }    
 alias ssj="jssh"
+
+gheconfig() {
+    git config --add hub.host $GITHUB_HOST
+}
