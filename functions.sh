@@ -14,7 +14,6 @@ setup_dotfiles() {
     cd "${HOME}"
     # Delete any broken symlinks in the homedir
     find -L . -maxdepth 1 -type l -exec rm -- {} +
-    . "${HOME}/.profile"
 }
 
 # 1. Attempt to efficiently syncrhonize .dotfiles from the local
