@@ -25,9 +25,8 @@ ssj() {
     local curdir=$(pwd)
     local func=$(typeset -f setup_dotfiles)
     local ssh_opts='-o ControlMaster=auto -o ControlPath=~/.ssh/mux_%h_%p_%r -o ControlPersist=1s'
-    cd "$HOME"
     rsync -av --delete-after --exclude .git \
-        -e "ssh $ssh_opts" .dotfiles "$@":~/
+        -e "ssh $ssh_opts" "${HOME}/.dotfiles" "$@":~/
     ssh -A -t $ssh_opts "$@" \
         "${func} ; setup_dotfiles ; \
          [ -r /etc/motd ] && cat /etc/motd ; \
