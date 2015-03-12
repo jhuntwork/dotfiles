@@ -22,7 +22,7 @@ setup_dotfiles() {
 # 2. Re-use the ssh tcp connection on the subsequent login
 # 3. Bypass the system shell login defaults and just exec a non-login,
 # interactive shell.
-jssh() {
+ssj() {
     local curdir=$(pwd)
     local func=$(typeset -f setup_dotfiles)
     local ssh_opts='-o ControlMaster=auto -o ControlPath=~/.ssh/mux_%h_%p_%r -o ControlPersist=1s'
@@ -39,4 +39,3 @@ jssh() {
          PATH=\"\$PATH\" SHELL=\"\$SHELL\" \
          USER=\"\$USER\" \$SHELL -i"
 }
-alias ssj="jssh"

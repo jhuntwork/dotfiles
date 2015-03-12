@@ -25,7 +25,7 @@ for path in $(printf "$PATH") ; do
 done
 PATH="${HOME}/bin:${HOME}/.rbenv/bin${NEWPATH}:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin"
 export PATH
-IFS=' '
+unset IFS
 
 PS1='$(set_ps1)'
 PS2=" > "
@@ -63,9 +63,3 @@ if type -p rbenv >/dev/null 2>&1 ; then
         eval "$(rbenv init - | sed '/rbenv.bash/d')"
     fi
 fi
-
-if type -p hub >/dev/null 2>&1 ; then
-    alias git=hub
-fi
-
-[ -r "${HOME}/.localprofile" ] && . "${HOME}/.localprofile"
