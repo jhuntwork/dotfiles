@@ -23,7 +23,7 @@ for path in $(printf "$PATH") ; do
         esac
     fi
 done
-PATH="${HOME}/bin:${HOME}/.rbenv/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin${NEWPATH}"
+PATH="${HOME}/bin:${HOME}/.rbenv/bin${NEWPATH}:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin"
 export PATH
 IFS=' '
 
