@@ -22,7 +22,6 @@ setup_dotfiles() {
 # 3. Bypass the system shell login defaults and just exec a non-login,
 # interactive shell.
 ssj() {
-    local curdir=$(pwd)
     local func=$(typeset -f setup_dotfiles)
     local ssh_opts='-o ControlMaster=auto -o ControlPath=~/.ssh/mux_%h_%p_%r -o ControlPersist=1s'
     rsync -av --delete-after --exclude .git \
