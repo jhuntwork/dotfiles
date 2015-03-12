@@ -1,30 +1,5 @@
-# Setup the dotfiles repo locally, or pull latest version from github.
-# Create symlinks in the $HOME directory to elements in the repo
-jpull() {
-    local REPO='https://github.com/jhuntwork/dotfiles'
-    local SGITURL="${REPO}/raw/e374d0dbc1754b21a3d36b9df5742d351d7fe460/git-static-x86_64-linux-musl.tar.xz"
-    local SGITPATH="${HOME}/.git-static"
-    local SGIT=git
-    if ! ${SGIT} --version >/dev/null 2>&1 ; then
-        SGIT="${SGITPATH}/git --exec-path=${SGITPATH}/git-core"
-        if ! ${SGIT} --version >/dev/null 2>&1 ; then
-            cd ${HOME}
-            curl -sL ${SGITURL} | tar -xJf -
-        fi
-    fi
-    if [ -d "${HOME}/.dotfiles" ] ; then
-        cd "${HOME}/.dotfiles"
-        ${SGIT} reset --hard HEAD >/dev/null 2>&1
-        ${SGIT} pull
-        ${SGIT} submodule init
-        ${SGIT} submodule update
-    else
-        cd "${HOME}"
-        ${SGIT} clone --depth 1 ${REPO} .dotfiles
-        cd "${HOME}/.dotfiles"
-        ${SGIT} submodule init
-        ${SGIT} submodule update
-    fi
+# Create symlinks in the $HOME directory to elements in .dotfiles
+setup_dotfiles() {
     cd "${HOME}/.dotfiles" &&
     for f in * ; do
         # A quick check on the files can prevent unnecessary forks
@@ -40,24 +15,28 @@ jpull() {
     . "${HOME}/.profile"
 }
 
-# Simple wrapper for ssh which makes jpull() available in the remote session
-# regardless of whether .dotfiles is present remotely or not
+# 1. Attempt to efficiently syncrhonize .dotfiles from the local
+# machine to the remote host first.
+# 2. Re-use the ssh tcp connection on the subsequent login
+# 3. Bypass the system shell login defaults and just exec a non-login,
+# interactive shell.
 jssh() {
-    local func=$(typeset -f jpull)
-    ssh -A -t "$@" \
-    "${func} ;
-    [ -r /etc/motd ] && cat /etc/motd ;
-    [ -r \"\$HOME/.profile\" ] && . \"\$HOME/.profile\" ;
-    type jssh >/dev/null 2>&1 || jpull ;
-    exec env -i SSH_AUTH_SOCK=\"\$SSH_AUTH_SOCK\" \
-      SSH_CONNECTION=\"\$SSH_CONNECTION\" \
-      SSH_CLIENT=\"\$SSH_CLIENT\" SSH_TTY=\"\$SSH_TTY\" \
-      HOME=\"\$HOME\" TERM=\"\$TERM\" \
-      PATH=\"\$PATH\" SHELL=\"\$SHELL\" \
-      USER=\"\$USER\" \$SHELL -i"
-}    
-alias ssj="jssh"
-
-gheconfig() {
-    git config --add hub.host $GITHUB_HOST
+    local curdir=$(pwd)
+    local func=$(typeset -f setup_dotfiles)
+    local ssh_opts='-o ControlMaster=auto -o ControlPath=~/.ssh/mux_%h_%p_%r -o ControlPersist=5s'
+    cd "$HOME"
+    rsync -av --delete-after \
+        --exclude .git .dotfiles -e "ssh $ssh_opts" "$@":~/
+    ssh -A -t $ssh_opts "$@" \
+        "${func} ;
+         [ -r /etc/motd ] && cat /etc/motd ;
+         [ -r \"\$HOME/.profile\" ] && . \"\$HOME/.profile\" ;
+         type jssh >/dev/null 2>&1 || setup_dotfiles ;
+         exec env -i SSH_AUTH_SOCK=\"\$SSH_AUTH_SOCK\" \
+         SSH_CONNECTION=\"\$SSH_CONNECTION\" \
+         SSH_CLIENT=\"\$SSH_CLIENT\" SSH_TTY=\"\$SSH_TTY\" \
+         HOME=\"\$HOME\" TERM=\"\$TERM\" \
+         PATH=\"\$PATH\" SHELL=\"\$SHELL\" \
+         USER=\"\$USER\" \$SHELL -i"
 }
+alias ssj="jssh"
