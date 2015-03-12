@@ -4,9 +4,11 @@ setup_dotfiles() {
     for f in * ; do
         # A quick check on the files can prevent unnecessary forks
         lf="${HOME}/.${f%/*}"
+        sf=".dotfiles/${f}"
         if [ ! "${f}" -ef "${lf}" ] ; then
             rm -rf "${lf}"
-            ln -s ".dotfiles/${f}" "${lf}"
+            printf "Creating %s -> %s\n" $lf $sf
+            ln -s "$sf" "$lf"
         fi
     done
     cd "${HOME}"
@@ -23,15 +25,13 @@ setup_dotfiles() {
 jssh() {
     local curdir=$(pwd)
     local func=$(typeset -f setup_dotfiles)
-    local ssh_opts='-o ControlMaster=auto -o ControlPath=~/.ssh/mux_%h_%p_%r -o ControlPersist=5s'
+    local ssh_opts='-o ControlMaster=auto -o ControlPath=~/.ssh/mux_%h_%p_%r -o ControlPersist=1s'
     cd "$HOME"
     rsync -av --delete-after \
         --exclude .git .dotfiles -e "ssh $ssh_opts" "$@":~/
     ssh -A -t $ssh_opts "$@" \
-        "${func} ;
-         [ -r /etc/motd ] && cat /etc/motd ;
-         [ -r \"\$HOME/.profile\" ] && . \"\$HOME/.profile\" ;
-         type jssh >/dev/null 2>&1 || setup_dotfiles ;
+        "${func} ; setup_dotfiles ; \
+         [ -r /etc/motd ] && cat /etc/motd ; \
          exec env -i SSH_AUTH_SOCK=\"\$SSH_AUTH_SOCK\" \
          SSH_CONNECTION=\"\$SSH_CONNECTION\" \
          SSH_CLIENT=\"\$SSH_CLIENT\" SSH_TTY=\"\$SSH_TTY\" \
