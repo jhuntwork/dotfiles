@@ -35,6 +35,9 @@ au BufRead,BufNewFile *.pp
 au BufRead,BufNewFile *_spec.rb
   \ nmap <F8> :!rspec --color %<CR>
 
+" Remove any trailing whitespace on save
+autocmd BufWritePre * :%s/\s\+$//e
+
 " Enable indentation matching for =>'s
 filetype plugin indent on
 
