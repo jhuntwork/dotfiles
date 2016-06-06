@@ -10,22 +10,8 @@ set_ps1() {
     printf "${hn} ${M}|\033[36m ${PWD}${R}\n${P} "
 }
 
-IFS=':'
-FOUND=''
-for path in $(printf "$PATH") ; do
-    if ! printf "$FOUND" | grep -q "|-|${path}|-|" ; then
-        FOUND="${FOUND}|-|${path}|-|"
-        case "${path}" in
-            /bin|/sbin|/usr/bin|/usr/sbin|/usr/local/bin|/usr/local/sbin|"${HOME}/bin"|"${HOME}/.rbenv/bin")
-                continue ;;
-            *)
-                NEWPATH="${NEWPATH}:${path}" ;;
-        esac
-    fi
-done
 PATH="${HOME}/bin:${HOME}/.rbenv/bin${NEWPATH}:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin"
 export PATH
-unset IFS
 
 PS1='$(set_ps1)'
 PS2=" > "
@@ -55,11 +41,8 @@ fi
 alias ll='ls -l'
 
 [ -r "${HOME}/.functions.sh" ] && . "${HOME}/.functions.sh"
-
-if type -p rbenv >/dev/null 2>&1 ; then
-    if [ $is_bash -eq 1 ] ; then
-        eval "$(rbenv init -)"
-    else
-        eval "$(rbenv init - | sed '/rbenv.bash/d')"
-    fi
+if [ -d "${HOME}/.profile.d" ] ; then
+    for file in ${HOME}/.profile.d/*.sh ; do
+        . "$file"
+    done
 fi
