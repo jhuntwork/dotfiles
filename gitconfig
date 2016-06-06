@@ -37,10 +37,12 @@
     pr = !sh -c 'git push origin HEAD:refs/for/`git rev-parse --abbrev-ref HEAD`'
     pom = push origin master
     pulla = pull --all
+    pullr = pull --rebase
     pusha = push --all
     sd = svn dcommit
     sr = svn rebase
     st = status
+    sy = !sh -c 'git fetch upstream && git checkout master && git rebase upstream/master'
     wd = diff --word-diff
     where = log --pretty=format:'%ad %h %d' --abbrev-commit --date=short -1
 [branch]
