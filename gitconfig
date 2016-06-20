@@ -18,6 +18,7 @@
     status = auto
 [alias]
     b = branch -v
+    bn = !git rev-parse --abbrev-ref HEAD
     bu = bundle
     cl = clone
     cleanup = !sh -c 'git branch -D jh && git branch jh && git co jh'
@@ -34,11 +35,12 @@
     nr = name-rev --name-only --refs=refs/heads/*
     nri = name-rev --refs=refs/heads/* --stdin
     ss = status -sb
-    pr = !sh -c 'git push origin HEAD:refs/for/`git rev-parse --abbrev-ref HEAD`'
+    pr = !sh -c 'git push origin HEAD:refs/for/$(git bn)'
     pom = push origin master
     pulla = pull --all
     pullr = pull --rebase
     pusha = push --all
+    pushb = "!git push -u origin $(git bn)"
     sd = svn dcommit
     sr = svn rebase
     st = status
