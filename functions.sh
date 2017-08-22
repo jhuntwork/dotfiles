@@ -1,66 +1,82 @@
 # Create symlinks in the $HOME directory to elements in .dotfiles
 setup_dotfiles() {
-    [ "$1" = "true" ] || return
-    cd "${HOME}/.dotfiles" &&
-    for f in * ; do
-        # A quick check on the files can prevent unnecessary forks
-        lf="${HOME}/.${f%/*}"
-        sf=".dotfiles/${f}"
-        if [ ! "${f}" -ef "${lf}" ] ; then
-            rm -rf "${lf}"
-            printf "Creating %s -> %s\n" $lf $sf
-            ln -s "$sf" "$lf"
+    cd "${HOME}/.dotfiles" || return
+
+    case $(uname -o) in
+        Darwin) stat_cmd='stat -f %Y' ;;
+             *) stat_cmd='stat -c %N' ;;
+    esac
+
+    # Create any missing symlinks
+    for item in * ; do
+        link="${HOME}/.${item%/*}"
+        source=".dotfiles/${item}"
+        if [ -L "$link" ] ; then
+            target=$(${stat_cmd} "$link" | cut -d"'" -f4)
+            [ "$target" = "$source" ] && continue
         fi
+        # `rm -rf` is used instead of `ln -sf` because $link could be a dir
+        rm -rf "${link}"
+        ln -s "$source" "$link"
     done
-    cd "${HOME}"
+
     # Delete any broken symlinks in the homedir
+    cd "${HOME}" || return
     find -L . -maxdepth 1 -type l -exec rm -- {} +
+
+    # Add ssh public key, if missing
     [ -d "${HOME}/.ssh" ] || install -m 0700 -d "${HOME}/.ssh"
-    identity=$(ssh-add -L)
-    rc=$?
-    if [ $rc -eq 0 ] ; then
-        grep -q "$identity" "${HOME}/.ssh/authorized_keys" 2>/dev/null || \
-            echo "$identity" >>"${HOME}/.ssh/authorized_keys"
+    if [ -n "$SSH_PUBKEY" ] ; then
+        grep -q "$SSH_PUBKEY" "${HOME}/.ssh/authorized_keys" 2>/dev/null || \
+            printf "%s\n" "$SSH_PUBKEY" >>"${HOME}/.ssh/authorized_keys"
     fi
 }
 
-# 1. Attempt to efficiently syncrhonize .dotfiles from the local
-# machine to the remote host first.
-# 2. Re-use the ssh tcp connection on the subsequent login
-# 3. Bypass the system shell login defaults and just exec a non-login,
-# interactive shell.
+# - Attempt to syncrhonize .dotfiles from the local host to the remote host.
+# - Try to re-use the tcp connection on the subsequent login (only OpenSSH).
+# - Bypass the system login defaults and exec a non-login, interactive shell.
 ssj() {
-    local func=$(typeset -f setup_dotfiles)
-    local ssh_opts='-q -o ControlMaster=auto -o ControlPath=~/.ssh/mux_%h_%p_%r -o ControlPersist=2s'
-    local sync="false"
-    if [ "$1" = "sync" ] ; then
-        sync="true"
-        shift
-        rsync -av --delete-after --exclude .git \
-            -e "ssh $ssh_opts" "${HOME}/.dotfiles" "$@":~/
-    fi
+    case $(ssh -V 2>&1 | cut -d' ' -f1) in
+        OpenSSH*)
+            ssh_opts='-q -o ControlMaster=auto'
+            ssh_opts="$ssh_opts -o ControlPath=~/.ssh/mux_%h_%p_%r"
+            ssh_opts="$ssh_opts -o ControlPersist=2s"
+            ;;
+    esac
+
+    [ -z "$SSH_PUBKEY" ] && SSH_PUBKEY=$(cat "${HOME}/.ssh/id_rsa.pub")
+
+    # rsync may fail, especially if it's not present on the remote host
+    # ignore and proceed to login
+    rsync -rltD --delete-after --exclude .git \
+          -e "ssh $ssh_opts" "${HOME}/.dotfiles" "$*":~/ 2>/dev/null
+
+    # shellcheck disable=SC2029,SC2086
     ssh -t $ssh_opts "$@" \
-        "${func} ; setup_dotfiles ${sync} ; \
+        "[ -f \${HOME}/.dotfiles/functions.sh ] &&
+         . \${HOME}/.dotfiles/functions.sh ; \
+         SSH_PUBKEY=\"${SSH_PUBKEY}\" ; export SSH_PUBKEY ; \
+         type setup_dotfiles >/dev/null 2>&1 && setup_dotfiles ; \
          exec env -i SSH_AUTH_SOCK=\"\$SSH_AUTH_SOCK\" \
-         SSH_CONNECTION=\"\$SSH_CONNECTION\" \
+         SSH_CONNECTION=\"\$SSH_CONNECTION\" SSH_PUBKEY=\"\$SSH_PUBKEY\" \
          SSH_CLIENT=\"\$SSH_CLIENT\" SSH_TTY=\"\$SSH_TTY\" \
          HOME=\"\$HOME\" TERM=\"\$TERM\" \
          SHELL=\"\$SHELL\" USER=\"\$USER\" \$SHELL -i"
 }
 
 msg() {
-    printf "%s\n" "$@"
+    printf "%s\n" "$*"
 }
 
 info() {
-    msg "INF: $@"
+    msg "INF: $*"
 }
 
 error() {
-    msg "ERR: $@"
+    msg "ERR: $*"
     exit 1
 }
 
 warn() {
-    msg "WRN: $@"
+    msg "WRN: $*"
 }

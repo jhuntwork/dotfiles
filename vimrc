@@ -17,6 +17,7 @@ set softtabstop=4
 set expandtab
 autocmd Filetype c setlocal ts=2 sts=2 sw=2
 autocmd Filetype puppet setlocal ts=2 sts=2 sw=2
+autocmd Filetype ruby setlocal ts=2 sts=2 sw=2
 
 " SEARCH highlight
 set incsearch
@@ -43,10 +44,22 @@ filetype plugin indent on
 
 " Syntax checking
 execute pathogen#infect()
-let g:syntastic_python_checkers = ['flake8']
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 let g:syntastic_echo_current_error = 1
+
+let g:syntastic_rst_checkers = ['syntastic-rst-sphinx']
+
+let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_python_flake8_args = "--max-line-length=80"
+
+let g:syntastic_shell_checkers = ['checkbashisms', 'sh', 'shellcheck']
+
 highlight SyntasticError guibg=#2f0000
 
 " autopep8
