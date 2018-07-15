@@ -21,7 +21,6 @@
     bn = !git rev-parse --abbrev-ref HEAD
     bu = bundle
     cl = clone
-    cleanup = !sh -c 'git branch -D jh && git branch jh && git co jh'
     cm = commit
     co = checkout
     cp = cherry-pick
