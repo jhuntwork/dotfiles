@@ -4,9 +4,8 @@ set backspace=2
 set nocompatible
 set encoding=utf-8
 "set number
-
-"set colorcolumn=80
 "set textwidth=80
+set mouse=
 
 " colors / schemes
 syntax on
@@ -107,3 +106,6 @@ endfunction
 
 let pyindent_nested_paren="&sw*2"
 let pyindent_open_paren="&sw*2"
+
+set colorcolumn=80
+highlight ColorColumn ctermbg=8
