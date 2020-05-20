@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 setup_dotfiles() {
     cd "${HOME}/.dotfiles" || return
     for i in * ; do
@@ -8,7 +8,7 @@ setup_dotfiles() {
         rm -rf "$l"
         ln -s "$s" "$l"
     done
-    cd "$HOME"
+    cd "$HOME" || return
     find -L . -maxdepth 1 -type l -exec rm -- {} +
 }
 
@@ -26,19 +26,19 @@ ssj() {
     k="${k% *}"
     ssh-add -L | grep -q "$k" || ssh-add "${HOME}/.ssh/id_rsa"
     [ -f "${HOME}/.d64" ] || tar -cf - -C "$HOME" --exclude .git \
-        --exclude vim/bundle/syntastic --exclude README.md .dotfiles|\
+        --exclude vim/bundle/syntastic --exclude README.md .dotfiles | \
         gzip -9 | base64 >"${HOME}/.d64"
     DOTFILES="$(cat "${HOME}/.d64")"
     ssh -tq -o StrictHostKeyChecking=no \
         -o UserKnownHostsFile=/dev/null "$@" \
-        "cd \"\$HOME\";\
-        printf '%s' '$DOTFILES'|base64 -d |tar -xz;\
-        . .dotfiles/functions.sh;\
-        add_public_key $k;\
-        setup_dotfiles;\
-        SHELL=\$SHELL;
-        MKSH=\$(command -v mksh);\
-        [ -n \"\$MKSH\" ] && SHELL=\"\$MKSH\";\
+        "cd \"\$HOME\"
+        printf '%s' '$DOTFILES' | base64 -d | tar -xz
+        . .dotfiles/functions.sh
+        add_public_key $k
+        setup_dotfiles
+        SHELL=\$SHELL
+        MKSH=\$(command -v mksh)
+        [ -n \"\$MKSH\" ] && SHELL=\"\$MKSH\"
         exec env -i HOME=\"\$HOME\" TERM=\"\$TERM\" \
             SHELL=\"\$SHELL\" USER=\"\$USER\" \$SHELL -i"
 }
@@ -52,11 +52,8 @@ syntastic() {
     fi
 }
 
-extra_profile() {
-    # shellcheck source=/dev/null
-    if [ -d "${HOME}/.extra_profile.d" ] ; then
-        for file in "${HOME}"/.extra_profile.d/*.sh ; do
-            . "$file"
-        done
-    fi
+git_open() {
+    url=$(git config --get remote.origin.url | sed 's@:@/@' | \
+          sed -e 's|git@|https://|' -e 's@https///@https://@')
+    [ -n "$url" ] && printf 'Opening %s\n' "$url" && open "$url"
 }

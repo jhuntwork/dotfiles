@@ -21,6 +21,8 @@
     bn = !git rev-parse --abbrev-ref HEAD
     bu = bundle
     cl = clone
+    cln = clean -xdn
+    clf = clean -xdf
     cm = commit
     co = checkout
     cp = cherry-pick
@@ -40,6 +42,8 @@
     pullr = pull --rebase
     pusha = push --all
     pushb = "!git push -u origin $(git bn)"
+    pushbf = "!git push -u origin $(git bn) --force-with-lease"
+    o = !sh -lc 'git_open'
     sd = svn dcommit
     sr = svn rebase
     st = status
