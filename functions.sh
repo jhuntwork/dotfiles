@@ -22,11 +22,11 @@ add_public_key() {
 
 ssj() {
     [ $# -eq 0 ] && return 1
-    k="$(cat "${HOME}/.ssh/id_rsa.pub" 2>/dev/null)"
+    k="$(cat "${HOME}/.ssh/id_ed25519.pub" 2>/dev/null)"
     k="${k% *}"
-    ssh-add -L | grep -q "$k" || ssh-add "${HOME}/.ssh/id_rsa"
+    ssh-add -L | grep -q "$k" || ssh-add "${HOME}/.ssh/id_ed25519"
     [ -f "${HOME}/.d64" ] || tar -cf - -C "$HOME" --exclude .git \
-        --exclude vim/bundle/syntastic --exclude README.md .dotfiles | \
+        --exclude vim --exclude README.md .dotfiles | \
         gzip -9 | base64 >"${HOME}/.d64"
     DOTFILES="$(cat "${HOME}/.d64")"
     ssh -tq -o StrictHostKeyChecking=no \
@@ -36,8 +36,16 @@ ssj() {
         . .dotfiles/functions.sh
         add_public_key $k
         setup_dotfiles
-        SHELL=\$SHELL
         MKSH=\$(command -v mksh)
+        [ -n \"\$MKSH\" ] && SHELL=\"\$MKSH\"
+        exec env -i HOME=\"\$HOME\" TERM=\"\$TERM\" \
+            SHELL=\"\$SHELL\" USER=\"\$USER\" \$SHELL -i"
+}
+
+ssk() {
+    ssh -tq -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null "$@" \
+        "MKSH=\$(command -v mksh)
         [ -n \"\$MKSH\" ] && SHELL=\"\$MKSH\"
         exec env -i HOME=\"\$HOME\" TERM=\"\$TERM\" \
             SHELL=\"\$SHELL\" USER=\"\$USER\" \$SHELL -i"

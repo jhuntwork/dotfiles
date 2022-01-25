@@ -1,5 +1,5 @@
 [user]
-    email = jhuntwork@lightcubesolutions.com
+    email = jeremy@merelinux.org
     name = Jeremy Huntwork
 [status]
     showUntrackedFiles = normal
@@ -17,6 +17,7 @@
     branch = auto
     status = auto
 [alias]
+    ane = !git cm --amend --no-edit
     b = branch -v
     bn = !git rev-parse --abbrev-ref HEAD
     bu = bundle

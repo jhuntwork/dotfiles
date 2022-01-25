@@ -5,6 +5,8 @@ ps1_p='$'
 [ "$(id -u)" -eq 0 ] && { ps1_c='\033[38;5;202m'; ps1_p='#'; }
 
 set_ps1() {
+    winsize=$(stty size)
+    export COLUMNS=${winsize##* }
     printf '%d %s %s %b%s%b\n%s ' \
         "$?" "$ps1_h" "$(date +%T)" "$ps1_c" "$PWD" '\033[00m' "$ps1_p"
 }
