@@ -51,7 +51,15 @@ ssk() {
             SHELL=\"\$SHELL\" USER=\"\$USER\" \$SHELL -i"
 }
 
+pathogen() {
+    r="${HOME}/.vim/autoload"
+    [ -d "$r" ] || install -d "$r"
+    [ -f "${r}/pathogen.vim" ] || \
+        curl -LSso "${r}/pathogen.vim" https://tpo.pe/pathogen.vim
+}
+
 syntastic() {
+    pathogen
     r="${HOME}/.vim/bundle"
     if [ ! -d "${r}/syntastic" ] ; then
         install -d "$r"

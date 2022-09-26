@@ -60,7 +60,7 @@ let g:syntastic_rst_checkers = ['syntastic-rst-sphinx']
 let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_python_flake8_args = "--max-line-length=80"
 
-let g:syntastic_shell_checkers = ['checkbashisms', 'sh', 'shellcheck']
+let g:syntastic_shell_checkers = ['shellcheck']
 let g:syntastic_sh_shellcheck_args = "-x"
 
 highlight SyntasticError guibg=#2f0000
@@ -68,44 +68,11 @@ highlight SyntasticError guibg=#2f0000
 " autopep8
 let g:autopep8_disable_show_diff=1
 
-
-""" Below is from Google Style Guide
-
-" Indent Python in the Google way.
-setlocal indentexpr=GetGooglePythonIndent(v:lnum)
-
-let s:maxoff = 50 " maximum number of lines to look backwards.
-
-function GetGooglePythonIndent(lnum)
-
-  " Indent inside parens.
-  " Align with the open paren unless it is at the end of the line.
-  " E.g.
-  "   open_paren_not_at_EOL(100,
-  "                         (200,
-  "                          300),
-  "                         400)
-  "   open_paren_at_EOL(
-  "       100, 200, 300, 400)
-  call cursor(a:lnum, 1)
-  let [par_line, par_col] = searchpairpos('(\|{\|\[', '', ')\|}\|\]', 'bW',
-        \ "line('.') < " . (a:lnum - s:maxoff) . " ? dummy :"
-        \ . " synIDattr(synID(line('.'), col('.'), 1), 'name')"
-        \ . " =~ '\\(Comment\\|String\\)$'")
-  if par_line > 0
-    call cursor(par_line, 1)
-    if par_col != col("$") - 1
-      return par_col
-    endif
-  endif
-
-  " Delegate the rest to the original function.
-  return GetPythonIndent(a:lnum)
-
-endfunction
-
-let pyindent_nested_paren="&sw*2"
-let pyindent_open_paren="&sw*2"
+let g:vim_markdown_folding_disabled = 1
 
 set colorcolumn=80
 highlight ColorColumn ctermbg=8
+let &colorcolumn="80,".join(range(120,999),",")
+
+let g:utl_cfg_hdl_scm_http_system = "silent !open -a Firefox %u"
+let g:utl_cfg_hdl_scm_http=g:utl_cfg_hdl_scm_http_system
