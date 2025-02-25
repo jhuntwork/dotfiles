@@ -1,26 +1,9 @@
-[user]
-    email = jeremy@merelinux.org
-    name = Jeremy Huntwork
-[status]
-    showUntrackedFiles = normal
-[core]
-    excludesfile = ~/.gitignore_global
-    attributesfile = ~/.gitattributes_global
-[push]
-    default = tracking
-[rerere]
-    enabled = 1
-    autoupdate = 1
-[color]
-    diff = auto
-    interactive = auto
-    branch = auto
-    status = auto
 [alias]
-    ane = !git cm --amend --no-edit
-    b = branch -v
-    bn = !git rev-parse --abbrev-ref HEAD
-    bu = bundle
+    ane = cm --amend --no-edit
+    ap = add -p
+    b = branch
+    bn = rev-parse --abbrev-ref HEAD
+    bv = branch -v
     cl = clone
     cln = clean -xdn
     clf = clean -xdf
@@ -28,28 +11,60 @@
     co = checkout
     cp = cherry-pick
     d = diff
-    dc = describe --contains
     ds = diff --staged
-    dsc = describe
-    dw = diff --color-words
-    fp = format-patch -k -M -N
-    k = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short
-    nr = name-rev --name-only --refs=refs/heads/*
-    nri = name-rev --refs=refs/heads/* --stdin
-    ss = status -sb
-    pr = !sh -c 'git push origin HEAD:refs/for/$(git bn)'
-    pom = push origin master
-    pulla = pull --all
-    pullr = pull --rebase
-    pusha = push --all
-    pushb = "!git push -u origin $(git bn)"
-    pushbf = "!git push -u origin $(git bn) --force-with-lease"
+    pb = "!git push -u origin $(git bn)"
+    pbf = "!git push -u origin $(git bn) --force-with-lease"
     o = !sh -lc 'git_open'
-    sd = svn dcommit
-    sr = svn rebase
     st = status
-    sy = !sh -c 'git fetch upstream && git checkout master && git rebase upstream/master'
-    wd = diff --word-diff
-    where = log --pretty=format:'%ad %h %d' --abbrev-commit --date=short -1
 [branch]
     autosetuprebase = always
+    sort = -committerdate
+[color]
+    branch = auto
+    diff = auto
+    interactive = auto
+    status = auto
+[column]
+    ui = auto
+[commit]
+    verbose = true
+[core]
+    attributesfile = ~/.gitattributes
+    excludesfile = ~/.gitignore
+    fsmonitor = true
+    untrackedCache = true
+[diff]
+    algorithm = histogram
+    colorMoved = plain
+    mnemonicPrefix = true
+    renames = true
+[fetch]
+    all = true
+    prune = true
+    pruneTags = true
+[help]
+    autocorrect = prompt
+[init]
+    defaultBranch = main
+[merge]
+    conflictstyle = zdiff3
+[pull]
+    rebase = true
+[push]
+    autoSetupRemote = true
+    default = simple
+    followTags = true
+[rebase]
+    autoSquash = true
+    autoStash = true
+    updateRefs = true
+[rerere]
+    autoupdate = true
+    enabled = true
+[status]
+    showUntrackedFiles = normal
+[tag]
+    sort = version:refname
+[user]
+    email = jeremy@merelinux.org
+    name = Jeremy Huntwork
